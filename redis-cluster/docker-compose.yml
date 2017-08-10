@@ -1,0 +1,39 @@
+version: '3'
+services:
+  redis-master:
+    image: kilsoo75/redis-master
+    container_name: redis-master
+  redis-slave01:
+    image: kilsoo75/redis-slave
+    container_name: redis-slave01
+    links:
+      - redis-master
+  redis-slave02:
+    image: kilsoo75/redis-slave
+    container_name: redis-slave02
+    links:
+      - redis-master
+  redis-sentinel01:
+    image: kilsoo75/redis-sentinel
+    container_name: redis-sentinel01
+    links:
+      - redis-master
+  redis-sentinel02:
+    image: kilsoo75/redis-sentinel
+    container_name: redis-sentinel02
+    links:
+      - redis-master
+  redis-sentinel03:
+    image: kilsoo75/redis-sentinel
+    container_name: redis-sentinel03
+    links:
+      - redis-master
+  haproxy-redis:
+    image: kilsoo75/haproxy-redis
+    container_name: haproxy-redis
+    ports:
+      - "7777:7777"
+    links:
+      - redis-master
+      - redis-slave01
+      - redis-slave02
