@@ -2,6 +2,9 @@ version: '3'
 services:
   redis-master:
     image: kilsoo75/redis-master
+    deploy:
+      restart_policy:
+        condition: none
     networks:
       - webnet
   redis-slave:
@@ -13,6 +16,8 @@ services:
       resources:
         limits:
           memory: 512M
+    depends_on:
+      - redis-master
     networks:
       - webnet
   redis-sentinel:
@@ -24,12 +29,18 @@ services:
       resources:
         limits:
           memory: 512M
+    depends_on:
+      - redis-master
+      - redis-slave
     networks:
       - webnet
   haproxy-redis:
     image: kilsoo75/haproxy-redis:0.8
     ports:
       - "7777:7777"
+    depends_on:
+      - redis-master
+      - redis-slave
     networks:
       - webnet
   visualizer:
@@ -41,6 +52,9 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+    depends_on:
+      - redis-master
+      - redis-slave
     networks:
       - webnet
 networks:
