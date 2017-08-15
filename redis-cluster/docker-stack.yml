@@ -1,0 +1,47 @@
+version: '3'
+services:
+  redis-master:
+    image: kilsoo75/redis-master
+    networks:
+      - webnet
+  redis-slave:
+    image: kilsoo75/redis-slave
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - webnet
+  redis-sentinel:
+    image: kilsoo75/redis-sentinel
+    deploy:
+      replicas: 5 
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - webnet
+  haproxy-redis:
+    image: kilsoo75/haproxy-redis:0.8
+    ports:
+      - "7777:7777"
+    networks:
+      - webnet
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+networks:
+  webnet:
