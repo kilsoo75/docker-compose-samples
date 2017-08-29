@@ -1,0 +1,152 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis-master
+  namespace: redis-ha
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        backend: redis-master
+    spec:
+      containers:
+      - name: redis-master
+        image: kilsoo75/redis-master
+        ports:
+        - name: master-port
+          containerPort: 6379
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-master
+  labels:
+    name: redis-master
+  namespace: redis-ha
+spec:
+  ports:
+  - port: 6379
+    targetPort: "master-port"
+  selector:
+    backend: redis-master
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis-slave
+  namespace: redis-ha
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        backend: redis-slave
+    spec:
+      containers:
+      - name: redis-slave
+        image: kilsoo75/redis-slave
+        ports:
+        - name: slave-port
+          containerPort: 6379
+        env:
+        - name: MASTER_NAME
+          value: redis-master.redis-ha
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-slave
+  labels:
+    name: redis-slave
+  namespace: redis-ha
+spec:
+  ports:
+  - port: 6379
+    targetPort: "slave-port"
+  selector:
+    backend: redis-slave
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis-sentinel
+  namespace: redis-ha
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        backend: redis-sentinel
+    spec:
+      containers:
+      - name: redis-sentinel
+        image: kilsoo75/redis-sentinel
+        ports:
+        - name: sentinel-port
+          containerPort: 16379
+        env:
+        - name: MASTER_NAME
+          value: redis-master.redis-ha
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-sentinel
+  labels:
+    name: redis-sentinel
+  namespace: redis-ha
+spec:
+  ports:
+  - port: 16379
+    targetPort: "sentinel-port"
+  selector:
+    backend: redis-sentinel
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis-haproxy
+  namespace: redis-ha
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        svc: redis-haproxy
+    spec:
+      containers:
+      - name: haproxy-redis
+        image: kilsoo75/haproxy-redis
+        ports:
+        - name: proxy-port
+          containerPort: 7777
+        env:
+        - name: MASTER_NAME
+          value: redis-master.redis-ha
+        - name: SLAVE_NAME
+          value: redis-slave.redis-ha
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-haproxy
+  labels:
+    name: redis-haproxy
+  namespace: redis-ha
+spec:
+  type: NodePort
+  ports:
+  - port: 7777
+    targetPort: "proxy-port"
+    nodePort: 30011
+  selector:
+    svc: redis-haproxy
