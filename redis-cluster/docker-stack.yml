@@ -51,19 +51,29 @@ services:
       - redis-haproxy
     networks:
       - webnet
-  visualizer:
-    image: dockersamples/visualizer:stable
+#  visualizer:
+#    image: dockersamples/visualizer:stable
+#    ports:
+#      - "8090:8090"
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#    deploy:
+#      placement:
+#        constraints: [node.role == manager]
+#    depends_on:
+#      - redis-master
+#      - redis-slave
+#    networks:
+#      - webnet
+  portainer:
+    image: portainer/portainer
     ports:
-      - "8080:8080"
+      - "9000:9000"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/opt/portainer:/data"
     deploy:
       placement:
-        constraints: [node.role == manager]
-    depends_on:
-      - redis-master
-      - redis-slave
-    networks:
-      - webnet
+        constraints: [node.role == manager]    
 networks:
   webnet:
