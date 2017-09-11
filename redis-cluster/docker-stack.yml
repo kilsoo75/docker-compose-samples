@@ -34,7 +34,7 @@ services:
       - redis-slave
     networks:
       - webnet
-  haproxy-redis:
+  redis-haproxy:
     image: kilsoo75/haproxy-redis
 #    ports:
 #      - "7777:7777"
