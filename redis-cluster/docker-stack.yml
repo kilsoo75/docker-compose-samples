@@ -44,7 +44,7 @@ services:
     networks:
       - webnet
   cloud-biz-frontend:
-    image: kilsoo75/cloud-movie-frontend
+    image: kilsoo75/cloud-movie
     ports:
       - "8080:8080"
     depends_on:
