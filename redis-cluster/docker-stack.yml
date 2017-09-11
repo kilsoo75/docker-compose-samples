@@ -23,7 +23,7 @@ services:
   redis-sentinel:
     image: kilsoo75/redis-sentinel
     deploy:
-      replicas: 5 
+      replicas: 3
       restart_policy:
         condition: on-failure
       resources:
@@ -35,12 +35,20 @@ services:
     networks:
       - webnet
   haproxy-redis:
-    image: kilsoo75/haproxy-redis:0.8
+    image: kilsoo75/haproxy-redis
     ports:
       - "7777:7777"
     depends_on:
       - redis-master
       - redis-slave
+    networks:
+      - webnet
+  cloud-biz-frontend:
+    image: kilsoo75/cloud-movie-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis-haproxy
     networks:
       - webnet
   visualizer:
