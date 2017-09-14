@@ -114,85 +114,108 @@ spec:
     targetPort: "sentinel-port"
   selector:
     backend: redis-sentinel
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: redis-haproxy
-  namespace: redis-ha
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        svc: redis-haproxy
-    spec:
-      containers:
-      - name: haproxy-redis
-        image: kilsoo75/haproxy-redis
-        ports:
-        - name: proxy-port
-          containerPort: 7777
-        env:
-        - name: MASTER_NAME
-          value: redis-master.redis-ha
-        - name: SLAVE_NAME
-          value: redis-slave.redis-ha
-      nodeSelector:
-        beta.kubernetes.io/os: linux
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-haproxy
-  labels:
-    name: redis-haproxy
-  namespace: redis-ha
-spec:
-  type: NodePort
-  ports:
-  - port: 7777
-    targetPort: "proxy-port"
-    nodePort: 30011
-  selector:
-    svc: redis-haproxy
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: cloud-movie-frontend
-  namespace: redis-ha
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        svc: cloud-movie-frontend
-    spec:
-      containers:
-      - name: cloud-movie-frontend
-        image: kilsoo75/cloud-movie
-        ports:
-        - name: frontend-port
-          containerPort: 8080
-      nodeSelector:
-        beta.kubernetes.io/os: linux
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cloud-movie-frontend
-  labels:
-    name: cloud-movie-frontend
-  namespace: redis-ha
-spec:
-  type: ClusterIP
-  ports:
-  - port: 8080
-    targetPort: "frontend-port"
-  externalIPs: 
-  - 169.56.83.54
-  - 169.56.83.55
-  - 169.56.83.56
-  selector:
-    svc: cloud-movie-frontend
+#---
+#apiVersion: extensions/v1beta1
+#kind: Deployment
+#metadata:
+#  name: redis-haproxy
+#  namespace: redis-ha
+#spec:
+#  replicas: 1
+#  template:
+#    metadata:
+#      labels:
+#        svc: redis-haproxy
+#    spec:
+#      containers:
+#      - name: haproxy-redis
+#        image: kilsoo75/haproxy-redis
+#        ports:
+#        - name: proxy-port
+#          containerPort: 7777
+#        env:
+#        - name: MASTER_NAME
+#          value: redis-master.redis-ha
+#        - name: SLAVE_NAME
+#          value: redis-slave.redis-ha
+#      nodeSelector:
+#        beta.kubernetes.io/os: linux
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: redis-haproxy
+#  labels:
+#    name: redis-haproxy
+#  namespace: redis-ha
+#spec:
+#  type: NodePort
+#  ports:
+#  - port: 7777
+#    targetPort: "proxy-port"
+#    nodePort: 30011
+#  selector:
+#    svc: redis-haproxy
+#---
+#apiVersion: extensions/v1beta1
+#kind: Deployment
+#metadata:
+#  name: cloud-movie-frontend
+#  namespace: redis-ha
+#spec:
+#  replicas: 2
+#  template:
+#    metadata:
+#      labels:
+#        svc: cloud-movie-frontend
+#        track: stable
+#    spec:
+#      containers:
+#      - name: cloud-movie-frontend
+#        image: kilsoo75/cloud-movie
+#        ports:
+#        - name: frontend-port
+#          containerPort: 8080
+#      nodeSelector:
+#        beta.kubernetes.io/os: linux
+#---
+#apiVersion: extensions/v1beta1
+#kind: Deployment
+#metadata:
+#  name: cloud-movie-frontend-b
+#  namespace: redis-ha
+#spec:
+#  replicas: 1
+#  template:
+#    metadata:
+#      labels:
+#        svc: cloud-movie-frontend
+#        stack: canary
+#    spec:
+#      containers:
+#      - name: cloud-movie-frontend
+#        image: kilsoo75/cloud-movie:2.0
+#        ports:
+#        - name: frontend-port
+#          containerPort: 8080
+#      nodeSelector:
+#        beta.kubernetes.io/os: linux
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: cloud-movie-frontend
+#  labels:
+#    name: cloud-movie-frontend
+#  namespace: redis-ha
+#spec:
+#  type: ClusterIP
+#  ports:
+#  - port: 8080
+#    targetPort: "frontend-port"
+#  externalIPs: 
+#  - 169.56.83.54
+#  - 169.56.83.55
+#  - 169.56.83.56
+#  selector:
+#    svc: cloud-movie-frontend

@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cloud-movie-frontend
+  namespace: redis-ha
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        svc: cloud-movie-frontend
+        track: stable
+    spec:
+      containers:
+      - name: cloud-movie-frontend
+        image: kilsoo75/cloud-movie:1.1
+        ports:
+        - name: frontend-port
+          containerPort: 8080
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cloud-movie-frontend-b
+  namespace: redis-ha
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        svc: cloud-movie-frontend
+        stack: canary
+    spec:
+      containers:
+      - name: cloud-movie-frontend
+        image: kilsoo75/cloud-movie:1.2
+        ports:
+        - name: frontend-port
+          containerPort: 8080
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-movie-frontend
+  labels:
+    name: cloud-movie-frontend
+  namespace: redis-ha
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: "frontend-port"
+  externalIPs: 
+  - 169.56.83.54
+  - 169.56.83.55
+  - 169.56.83.56
+  selector:
+    svc: cloud-movie-frontend

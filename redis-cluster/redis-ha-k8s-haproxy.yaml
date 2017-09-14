@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis-haproxy
+  namespace: redis-ha
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        svc: redis-haproxy
+    spec:
+      containers:
+      - name: haproxy-redis
+        image: kilsoo75/haproxy-redis
+        ports:
+        - name: proxy-port
+          containerPort: 7777
+        env:
+        - name: MASTER_NAME
+          value: redis-master.redis-ha
+        - name: SLAVE_NAME
+          value: redis-slave.redis-ha
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-haproxy
+  labels:
+    name: redis-haproxy
+  namespace: redis-ha
+spec:
+  type: NodePort
+  ports:
+  - port: 7777
+    targetPort: "proxy-port"
+    nodePort: 30011
+  selector:
+    svc: redis-haproxy
+
