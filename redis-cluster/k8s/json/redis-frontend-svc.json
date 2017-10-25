@@ -1,0 +1,31 @@
+
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "labels": {
+                    "name": "cloud-movie-frontend"
+                },
+                "name": "cloud-movie-frontend",
+                "namespace": "redis-ha"
+            },
+            "spec": {
+                "externalIPs": [
+                    "169.56.102.101",
+                    "169.56.102.102",
+                    "169.56.102.105"
+                ],
+                "ports": [
+                    {
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": "frontend-port"
+                    }
+                ],
+                "selector": {
+                    "svc": "cloud-movie-frontend"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            }
+        }

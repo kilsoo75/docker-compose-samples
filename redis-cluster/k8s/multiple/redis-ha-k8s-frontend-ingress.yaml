@@ -1,15 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cloud-movie-frontend
+  name: cloud-movie-frontend-a
   namespace: redis-ha
 spec:
-  replicas: 3
+  replicas: 5
   template:
     metadata:
       labels:
-        svc: cloud-movie-frontend
-        track: stable
+        svc: cloud-movie-frontend-a
     spec:
       containers:
       - name: cloud-movie-frontend
@@ -30,7 +29,7 @@ spec:
   template:
     metadata:
       labels:
-        svc: cloud-movie-frontend
+        svc: cloud-movie-frontend-b
         stack: canary
     spec:
       containers:
@@ -45,18 +44,33 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-movie-frontend
+  name: cloud-movie-frontend-a
   labels:
-    name: cloud-movie-frontend
+    name: cloud-movie-frontend-a
   namespace: redis-ha
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+  - port: 80
     targetPort: "frontend-port"
-  externalIPs: 
-  - 169.56.83.54
-  - 169.56.83.55
-  - 169.56.83.56
+    protocol: TCP
+    name: http
   selector:
-    svc: cloud-movie-frontend
+    svc: cloud-movie-frontend-a
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-movie-frontend-b
+  labels:
+    name: cloud-movie-frontend-b
+  namespace: redis-ha
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: "frontend-port"
+    protocol: TCP
+    name: http
+  selector:
+    svc: cloud-movie-frontend-b

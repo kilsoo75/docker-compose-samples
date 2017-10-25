@@ -1,0 +1,28 @@
+
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "labels": {
+                    "name": "redis-haproxy"
+                },
+                "name": "redis-haproxy",
+                "namespace": "redis-ha"
+            },
+            "spec": {
+                "externalTrafficPolicy": "Cluster",
+                "ports": [
+                    {
+                        "nodePort": 30011,
+                        "port": 7777,
+                        "protocol": "TCP",
+                        "targetPort": "proxy-port"
+                    }
+                ],
+                "selector": {
+                    "svc": "redis-haproxy"
+                },
+                "sessionAffinity": "None",
+                "type": "NodePort"
+            }
+        }

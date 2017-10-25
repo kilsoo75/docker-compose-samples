@@ -1,0 +1,182 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2017-09-18T10:18:57Z",
+                "labels": {
+                    "name": "cloud-movie-frontend"
+                },
+                "name": "cloud-movie-frontend",
+                "namespace": "redis-ha",
+                "resourceVersion": "492290",
+                "selfLink": "/api/v1/namespaces/redis-ha/services/cloud-movie-frontend",
+                "uid": "c81250c6-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "clusterIP": "10.99.87.11",
+                "externalIPs": [
+                    "169.56.83.54",
+                    "169.56.83.55",
+                    "169.56.83.56"
+                ],
+                "ports": [
+                    {
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": "frontend-port"
+                    }
+                ],
+                "selector": {
+                    "svc": "cloud-movie-frontend"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2017-09-18T10:18:42Z",
+                "labels": {
+                    "name": "redis-haproxy"
+                },
+                "name": "redis-haproxy",
+                "namespace": "redis-ha",
+                "resourceVersion": "492210",
+                "selfLink": "/api/v1/namespaces/redis-ha/services/redis-haproxy",
+                "uid": "bf058964-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "clusterIP": "10.110.67.141",
+                "externalTrafficPolicy": "Cluster",
+                "ports": [
+                    {
+                        "nodePort": 30011,
+                        "port": 7777,
+                        "protocol": "TCP",
+                        "targetPort": "proxy-port"
+                    }
+                ],
+                "selector": {
+                    "svc": "redis-haproxy"
+                },
+                "sessionAffinity": "None",
+                "type": "NodePort"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2017-09-18T10:18:02Z",
+                "labels": {
+                    "name": "redis-master"
+                },
+                "name": "redis-master",
+                "namespace": "redis-ha",
+                "resourceVersion": "492001",
+                "selfLink": "/api/v1/namespaces/redis-ha/services/redis-master",
+                "uid": "a754c84d-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "clusterIP": "10.108.227.174",
+                "ports": [
+                    {
+                        "port": 6379,
+                        "protocol": "TCP",
+                        "targetPort": "master-port"
+                    }
+                ],
+                "selector": {
+                    "backend": "redis-master"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2017-09-18T10:18:02Z",
+                "labels": {
+                    "name": "redis-sentinel"
+                },
+                "name": "redis-sentinel",
+                "namespace": "redis-ha",
+                "resourceVersion": "492049",
+                "selfLink": "/api/v1/namespaces/redis-ha/services/redis-sentinel",
+                "uid": "a774a9de-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "clusterIP": "10.103.103.245",
+                "ports": [
+                    {
+                        "port": 16379,
+                        "protocol": "TCP",
+                        "targetPort": "sentinel-port"
+                    }
+                ],
+                "selector": {
+                    "backend": "redis-sentinel"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2017-09-18T10:18:02Z",
+                "labels": {
+                    "name": "redis-slave"
+                },
+                "name": "redis-slave",
+                "namespace": "redis-ha",
+                "resourceVersion": "492023",
+                "selfLink": "/api/v1/namespaces/redis-ha/services/redis-slave",
+                "uid": "a765732a-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "clusterIP": "10.104.245.251",
+                "ports": [
+                    {
+                        "port": 6379,
+                        "protocol": "TCP",
+                        "targetPort": "slave-port"
+                    }
+                ],
+                "selector": {
+                    "backend": "redis-slave"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

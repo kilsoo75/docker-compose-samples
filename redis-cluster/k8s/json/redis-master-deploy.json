@@ -1,0 +1,58 @@
+{
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "labels": {
+                    "backend": "redis-master"
+                },
+                "name": "redis-master",
+                "namespace": "redis-ha"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "backend": "redis-master"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "backend": "redis-master"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "kilsoo75/redis-master",
+                                "imagePullPolicy": "Always",
+                                "name": "redis-master",
+                                "ports": [
+                                    {
+                                        "containerPort": 6379,
+                                        "name": "master-port",
+                                        "protocol": "TCP"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            }
+        }

@@ -1,0 +1,554 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2017-09-18T10:18:57Z",
+                "generation": 1,
+                "labels": {
+                    "svc": "cloud-movie-frontend",
+                    "track": "stable"
+                },
+                "name": "cloud-movie-frontend",
+                "namespace": "redis-ha",
+                "resourceVersion": "492330",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/redis-ha/deployments/cloud-movie-frontend",
+                "uid": "c8033080-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "replicas": 3,
+                "selector": {
+                    "matchLabels": {
+                        "svc": "cloud-movie-frontend",
+                        "track": "stable"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "svc": "cloud-movie-frontend",
+                            "track": "stable"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "kilsoo75/cloud-movie:1.1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "cloud-movie-frontend",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "name": "frontend-port",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 3,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2017-09-18T10:18:59Z",
+                        "lastUpdateTime": "2017-09-18T10:18:59Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 3,
+                "replicas": 3,
+                "updatedReplicas": 3
+            }
+        },
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2017-09-18T10:18:57Z",
+                "generation": 1,
+                "labels": {
+                    "stack": "canary",
+                    "svc": "cloud-movie-frontend"
+                },
+                "name": "cloud-movie-frontend-b",
+                "namespace": "redis-ha",
+                "resourceVersion": "492338",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/redis-ha/deployments/cloud-movie-frontend-b",
+                "uid": "c807c99d-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "stack": "canary",
+                        "svc": "cloud-movie-frontend"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "stack": "canary",
+                            "svc": "cloud-movie-frontend"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "kilsoo75/cloud-movie:1.2",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "cloud-movie-frontend",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "name": "frontend-port",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2017-09-18T10:18:57Z",
+                        "lastUpdateTime": "2017-09-18T10:18:57Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2017-09-18T10:18:42Z",
+                "generation": 1,
+                "labels": {
+                    "svc": "redis-haproxy"
+                },
+                "name": "redis-haproxy",
+                "namespace": "redis-ha",
+                "resourceVersion": "1123007",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/redis-ha/deployments/redis-haproxy",
+                "uid": "befd4ffd-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "svc": "redis-haproxy"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "svc": "redis-haproxy"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "MASTER_NAME",
+                                        "value": "redis-master.redis-ha"
+                                    },
+                                    {
+                                        "name": "SLAVE_NAME",
+                                        "value": "redis-slave.redis-ha"
+                                    }
+                                ],
+                                "image": "kilsoo75/haproxy-redis",
+                                "imagePullPolicy": "Always",
+                                "name": "haproxy-redis",
+                                "ports": [
+                                    {
+                                        "containerPort": 7777,
+                                        "name": "proxy-port",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2017-09-18T10:18:42Z",
+                        "lastUpdateTime": "2017-09-18T10:18:42Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2017-09-18T10:18:02Z",
+                "generation": 1,
+                "labels": {
+                    "backend": "redis-master"
+                },
+                "name": "redis-master",
+                "namespace": "redis-ha",
+                "resourceVersion": "1123037",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/redis-ha/deployments/redis-master",
+                "uid": "a74bbf7f-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "backend": "redis-master"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "backend": "redis-master"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "kilsoo75/redis-master",
+                                "imagePullPolicy": "Always",
+                                "name": "redis-master",
+                                "ports": [
+                                    {
+                                        "containerPort": 6379,
+                                        "name": "master-port",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2017-09-18T10:18:02Z",
+                        "lastUpdateTime": "2017-09-18T10:18:02Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2017-09-18T10:18:02Z",
+                "generation": 1,
+                "labels": {
+                    "backend": "redis-sentinel"
+                },
+                "name": "redis-sentinel",
+                "namespace": "redis-ha",
+                "resourceVersion": "1123011",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/redis-ha/deployments/redis-sentinel",
+                "uid": "a76b575b-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "replicas": 3,
+                "selector": {
+                    "matchLabels": {
+                        "backend": "redis-sentinel"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "backend": "redis-sentinel"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "MASTER_NAME",
+                                        "value": "redis-master.redis-ha"
+                                    }
+                                ],
+                                "image": "kilsoo75/redis-sentinel",
+                                "imagePullPolicy": "Always",
+                                "name": "redis-sentinel",
+                                "ports": [
+                                    {
+                                        "containerPort": 16379,
+                                        "name": "sentinel-port",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 3,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2017-09-18T10:18:07Z",
+                        "lastUpdateTime": "2017-09-18T10:18:07Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 3,
+                "replicas": 3,
+                "updatedReplicas": 3
+            }
+        },
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2017-09-18T10:18:02Z",
+                "generation": 1,
+                "labels": {
+                    "backend": "redis-slave"
+                },
+                "name": "redis-slave",
+                "namespace": "redis-ha",
+                "resourceVersion": "1123023",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/redis-ha/deployments/redis-slave",
+                "uid": "a75bc0e5-9c5a-11e7-ac97-06ccc865f201"
+            },
+            "spec": {
+                "replicas": 2,
+                "selector": {
+                    "matchLabels": {
+                        "backend": "redis-slave"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "backend": "redis-slave"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "MASTER_NAME",
+                                        "value": "redis-master.redis-ha"
+                                    }
+                                ],
+                                "image": "kilsoo75/redis-slave",
+                                "imagePullPolicy": "Always",
+                                "name": "redis-slave",
+                                "ports": [
+                                    {
+                                        "containerPort": 6379,
+                                        "name": "slave-port",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2017-09-18T10:18:09Z",
+                        "lastUpdateTime": "2017-09-18T10:18:09Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 2,
+                "replicas": 2,
+                "updatedReplicas": 2
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

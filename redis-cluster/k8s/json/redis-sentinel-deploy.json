@@ -1,0 +1,68 @@
+
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "labels": {
+                    "backend": "redis-sentinel"
+                },
+                "name": "redis-sentinel",
+                "namespace": "redis-ha"
+            },
+            "spec": {
+                "replicas": 3,
+                "selector": {
+                    "matchLabels": {
+                        "backend": "redis-sentinel"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": 1,
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "backend": "redis-sentinel"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "MASTER_NAME",
+                                        "value": "redis-master.redis-ha"
+                                    }
+                                ],
+                                "image": "kilsoo75/redis-sentinel",
+                                "imagePullPolicy": "Always",
+                                "name": "redis-sentinel",
+                                "ports": [
+                                    {
+                                        "containerPort": 16379,
+                                        "name": "sentinel-port",
+                                        "protocol": "TCP"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "nodeSelector": {
+                            "beta.kubernetes.io/os": "linux"
+                        },
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            }
+        }
